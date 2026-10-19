@@ -65,4 +65,23 @@ public class HttpResponse {
             FileLogger.logEvent("Could not write the response: " + e.getMessage());
         }
     }
+
+    // serves STATIC bytes (the provided stylesheet and the photographs) — images are
+    // binary, so they cannot go through the StringBuffer/String path above
+    public void bytes(int status, String reason, String contentType, byte[] data) {
+        try {
+            OutputStream out = socket.getOutputStream();
+            StringBuffer head = new StringBuffer();    // ★ Asg 5: headers still assembled in StringBuffer
+            head.append("HTTP/1.1 ").append(status).append(' ').append(reason).append("\r\n");
+            head.append("Content-Type: ").append(contentType).append("\r\n");
+            head.append("Content-Length: ").append(data.length).append("\r\n");
+            head.append("Cache-Control: max-age=3600\r\n");
+            head.append("Connection: close\r\n\r\n");
+            out.write(head.toString().getBytes("UTF-8"));
+            out.write(data);                           // the file bytes follow the headers unchanged
+            out.flush();
+        } catch (IOException e) {
+            FileLogger.logEvent("Could not write the file: " + e.getMessage());
+        }
+    }
 }

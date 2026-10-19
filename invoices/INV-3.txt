@@ -1,0 +1,6 @@
+CAMPUSKART INVOICE
+------------------
+Transaction : 3
+Date        : Sun Oct 18 22:55:33 IST 2026
+Item        : Harry Potter Book Set
+Total (INR) : 800.0

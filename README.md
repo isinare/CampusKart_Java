@@ -78,6 +78,31 @@ Open **http://localhost:8080** in a browser — the full site works there (HTML,
 cookies). The `logs/` and `invoices/` folders are created automatically, so start the
 server from inside `CampusKart_Java/`.
 
+### The web UI (HTML + CSS only, no JavaScript)
+
+The browser pages reuse the **CampusKart web design** that came with the project
+(`CampusKart_Web/`), but only two kinds of asset from it:
+
+- `style.css` — the design system (colours, cards, tables, forms), served by the Java
+  server at `/style.css`;
+- `images/` — the hero and product photographs, served at `/images/...`.
+
+Every pixel of content is generated **on the server** in `util/HtmlBuilder.java` with
+`StringBuffer` (Assignment 5). The design's `app.js` and `api.js` are client-side
+JavaScript and are **deliberately never served or referenced** — the scope document
+(section 2.2) forbids JavaScript, so the browser receives plain HTML + CSS and does no
+processing at all. Search, filters, login, posting items, requests and admin approval
+are all ordinary HTML forms posting back to the Java server.
+
+The server reads the design folder from `../CampusKart_Web` (i.e. `CampusKart_Web/`
+must sit next to `CampusKart_Java/`). A different location can be given with:
+
+```bash
+java -Dcampuskart.web=/path/to/CampusKart_Web -cp "out:lib/*" com.campuskart.server.CampusKartServer
+```
+
+If the folder is missing, the site still works — it just looks unstyled.
+
 ### 5. Run the Swing client (separate terminal)
 
 ```bash
@@ -134,7 +159,7 @@ assignment, so the code doubles as a viva answer sheet.
 | 10 | Abstract class + method | `abstract class User`, `getDashboardPath()` |
 | 11 | Interface implementation | `Receipt implements Billable` |
 | 12 | User-defined packages | all six `com.campuskart.*` packages |
-| 13 | File handling (write **and** read) | `util/FileLogger.java` — invoices + server log |
+| 13 | File handling (write **and** read) | `util/FileLogger.java` — invoices + server log; invoices read back on the requests page; `util/WebAssets.java` — design CSS/images served from disk |
 | 14 | try/catch, **nested**, **multiple** catch | `Router.dispatch`, every DAO `finally`, `RequestDAO.complete` |
 | 15 | `finally`, `throw`, `throws` | every DAO method, `ClientHandler.run`, `Router.addItem` |
 | 16 | User-defined exceptions | `exception/` package (3 exceptions) |
